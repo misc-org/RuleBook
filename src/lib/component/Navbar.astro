@@ -1,0 +1,53 @@
+---
+import { DOMParser } from 'xmldom'
+const responce = await
+fetch('https://raw.githubusercontent.com/misc-org/RuleBook-Docs/main/common/router.xml')
+const data = await responce.text()
+const parser = new DOMParser()
+const xml = parser.parseFromString(data, 'application/xml')
+const parseError = xml.getElementsByTagName('parsererror')
+if (parseError.length > 0) {
+    throw new Error('in parse')
+}
+let contents = []
+let tree = []
+if (xml) {
+    const topics = xml.getElementsByTagName('topic')
+    for (let i=0; i<topics.length; i++) {
+        const topic = topics[i]
+        const src = topic.getAttribute('src')
+        const title = topic.getAttribute('title')
+        if (!src) return
+        const elements = topic.getElementsByTagName('element')
+        tree.push({title:title,contents:[]})
+        if (elements.length > 0) {
+            for (let i=0; i<elements.length; i++) {
+                const elementSRC = elements[i].getAttribute('src')
+                if (elementSRC) {
+                    const responce = await
+                    fetch(`https://raw.githubusercontent.com/misc-org/RuleBook-Docs/main/common/${src}/${elementSRC}.md`)
+                    if (!responce.ok) return
+                    const md = await responce.text()
+                    contents.push(md)
+                    const match = md.match(/^#\s+(.+)$/m)
+                    if (match && match[1]) {
+                        const title = match[1].trim()
+                        console.log(tree[tree.length-1].contents)
+                        tree[tree.length-1].contents.push(title)
+                    }
+                }
+            }
+        } else {
+            const responce = await
+            fetch(`https://raw.githubusercontent.com/misc-org/RuleBook-Common/main/common/${src}.md`)
+            const md = await responce.text()
+            contents.push(md)
+        }
+    }
+}
+console.log(contents)
+---
+
+<div class="w-full h-full bg-slate-200">
+{tree}
+</div>

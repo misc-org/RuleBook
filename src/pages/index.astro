@@ -1,5 +1,7 @@
 ---
 import Main from "./main.astro"
+import Header from "@lib/component/Header.astro"
+import Navbar from "@lib/component/Navbar.astro"
 ---
 
 <html lang="en">
@@ -8,9 +10,13 @@ import Main from "./main.astro"
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <meta name="viewport" content="width=device-width"/>
     <meta name="generator" content={Astro.generator}/>
-    <title>Astro</title>
+    <title>MICS RuleBook Common</title>
 </head>
 <body>
-    <Main/>
+    <Header/>
+    <div class="pt-[60px] grid grid-cols-[200px_1fr] w-screen h-screen">
+        <Navbar />
+        <Main />
+    </div>
 </body>
 </html>

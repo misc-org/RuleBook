@@ -1,8 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
+interface Props {
+    class?: string;
+}
+const { class: className } = Astro.props
 ---
 
-<header class="h-[60px] w-full p-4 bg-slate-900 text-white fixed flex justify-between align-middle">
+<header class={`w-full p-4 bg-slate-900 text-white fixed flex justify-between align-middle ${className}`}>
     <div class="flex align-middle">
         <h1>MISC RuleBook Common</h1>
     </div>

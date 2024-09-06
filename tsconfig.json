@@ -10,7 +10,11 @@
     "baseUrl": ".",
     "paths": {
       "@lib/*": ["./src/lib/*"],
-      "@lib": ["./src/lib"]
+      "@lib": ["./src/lib"],
+      "@layout/*": ["./src/layout/*"],
+      "@layout": ["./src/layout"],
+      "@md/*": ["./src/md/*"],
+      "@md": ["./src/md"],
     }
   }
 }

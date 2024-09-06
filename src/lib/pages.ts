@@ -1,4 +1,4 @@
-interface Page {
+export interface Page {
     title: string;
     src: string;
     contents?: Page[]

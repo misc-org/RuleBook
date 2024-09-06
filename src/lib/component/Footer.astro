@@ -1,0 +1,116 @@
+---
+import { Icon } from "astro-icon/components";
+import pages from "@lib/pages";
+import type { Page } from "@lib/pages";
+interface Props {
+    class?: string;
+}
+const { class: className } = Astro.props;
+const { path } = Astro.params as { path: string };
+
+function findPageLinks(currentPath: string) {
+    let before: string | null = null;
+    let after: string | null = null;
+    let found: boolean = false;
+
+    function traversePages(pageList: Page[], parentPath: string = ''): boolean {
+        for (let i = 0; i < pageList.length; i++) {
+            const page = pageList[i];
+            const fullPath = parentPath ? `${parentPath}/${page.src}` : page.src;
+
+            if (page.contents) {
+                if (traversePages(page.contents, fullPath)) {
+                    return true;
+                }
+            } else {
+                if (found) {
+                    after = fullPath;
+                    return true;
+                }
+
+                if (fullPath === currentPath) {
+                    found = true;
+                    if (i > 0) {
+                        const prevPage = pageList[i - 1];
+                        if (parentPath) {
+                            before = prevPage.contents ? `${parentPath}/${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : `${parentPath}/${prevPage.src}`;
+                        } else {
+                            before = prevPage.contents ? `${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : prevPage.src;
+                        }
+                    } else if (parentPath) {
+                        const parentPages = parentPath.split('/');
+                        const parentIndex = pages.findIndex(p => p.src === parentPages[parentPages.length - 1]);
+                        if (parentIndex > 0) {
+                            const grandParentPage = pages[parentIndex - 1];
+                            if (grandParentPage.contents) {
+                                if (parentPages.length === 1) {
+                                    before = `${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
+                                } else {
+                                    before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
+                                }
+                            } else {
+                                before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}`;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    function traverseAllPages(pageList: Page[], parentPath: string = ''): boolean {
+        for (let i = 0; i < pageList.length; i++) {
+            const page = pageList[i];
+            const fullPath = parentPath ? `${parentPath}/${page.src}` : page.src;
+
+            if (found) {
+                after = page.contents ? `${fullPath}/${page.contents[0].src}` : fullPath;
+                return true;
+            }
+
+            if (fullPath === currentPath) {
+                found = true;
+                if (i > 0) {
+                    const prevPage = pageList[i - 1];
+                    before = prevPage.contents ? `${parentPath}/${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : `${parentPath}/${prevPage.src}`;
+                } else if (parentPath) {
+                    const parentPages = parentPath.split('/');
+                    const parentIndex = pageList.findIndex(p => p.src === parentPages[parentPages.length - 1]);
+                    if (parentIndex > 0) {
+                        const grandParentPage = pageList[parentIndex - 1];
+                        if (grandParentPage.contents) {
+                            before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
+                        } else {
+                            before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}`;
+                        }
+                    }
+                }
+            }
+
+            if (page.contents && traverseAllPages(page.contents, fullPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    traversePages(pages);
+    if (!found) {
+        traverseAllPages(pages);
+    }
+    return { before, after };
+}
+
+const { before, after } = findPageLinks(path);
+console.log(before, after);
+---
+
+<footer class={`w-full bg-slate-200 flex justify-between ${className}`}>
+    <div class="flex align-middle">
+        {before && <a href={`/${before}`} class="p-2">Previous</a>}
+    </div>
+    <div class="flex align-middle">
+        {after && <a href={`/${after}`} class="p-2">Next</a>}
+    </div>
+</footer>

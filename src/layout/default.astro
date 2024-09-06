@@ -1,5 +1,6 @@
 ---
 import Header from "@lib/component/Header.astro";
+import Footer from "@lib/component/Footer.astro";
 import Navbar from "@lib/component/Navbar.astro";
 interface Props {
     title?: string;
@@ -19,7 +20,10 @@ const { title = "MISC RuleBook Common" } = Astro.props;
         <Header class="col-span-full" />
         <Navbar class="row-start-2 col-start-1 h-[100vh-60px]" />
         <main class="row-start-2 col-start-2 h-[screen-60px] overflow-y-auto">
-            <slot />
+            <div class="min-h-[calc(100%-100px)]">
+                <slot />
+            </div>
+            <Footer class="min-h-[100px]" />
         </main>
     </body>
 </html>

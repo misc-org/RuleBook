@@ -1,22 +1,20 @@
 ---
-import Layout from '@layout/default.astro'
-import pages from '@lib/pages';
-import { getCollection } from 'astro:content';
-import Markdown from '@astrojs/markdown-remark'
+import Layout from "@layout/default.astro";
+import { getCollection } from "astro:content";
 export async function getStaticPaths() {
-    const mds= await getCollection('md')
-    console.log(mds)
-    return mds.map((entry: {slug: string}) => ({
+    const mds = await getCollection("md");
+    console.log(mds);
+    return mds.map((entry: { [x: string]: any; slug: string }) => ({
         params: { path: `/${entry.slug}` },
         props: { entry },
-    }))
+    }));
 }
-const { entry } = Astro.props
-const { Content } = await entry.render()
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
 <Layout>
-    <article>
+    <article class="p-10">
         <Content />
     </article>
 </Layout>

@@ -1,22 +1,35 @@
 ---
-import pages from "@lib/pages"
-const { path } = Astro.params
-console.log(path)
-let title = pages.map((page) => {
+import pages from "@lib/pages";
+const { path } = Astro.params;
+console.log(path);
+let title = "";
+pages.map((page) => {
     if (page.contents) {
-        const contents = page.contents
+        const contents = page.contents;
         contents.map((content) => {
             if (`${page.src}/${content.src}` == path) {
-                return content.title
+                title = content.title;
             }
-        })
+        });
     } else {
         if (`${page.src}` == path) {
-            return page.title
+            title = page.title;
         }
     }
-})
+});
 ---
 
 <h1>{title}</h1>
 <slot />
+
+<style is:global lang="postcss">
+    article {
+        font-family: "M PLUS 1", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+
+        h1 {
+            @apply text-lg
+        }
+    }
+</style>

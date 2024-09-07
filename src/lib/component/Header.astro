@@ -27,38 +27,45 @@ const { class: className } = Astro.props
 
 <div id="wrapper" style="opacity: 0; pointer-events: none" class="fixed transition-opacity duration-300 ease-in-out top-[60px] w-full h-full bg-slate-200/60 md:hidden" />
 
-<div id="sidebar" style="left: -100%; top: 60px;" class="fixed transition-left duration-300 ease-in-out h-[calc(100%-60px)] z-50 shadow-2xl">
+<div id="sidebar" style="left: -100%; top: 60px;" class="fixed transition-left duration-300 ease-in-out h-[calc(100%-60px)] z-50 shadow-2xl md:hidden">
     <Navbar class="w-[220px]" />
 </div>
 
 <script>
-    const menubar = document.getElementById('menubar');
-    const wrapper = document.getElementById('wrapper');
-    const sidebar = document.getElementById('sidebar');
+    let menubar: HTMLElement | null = null
+    let wrapper: HTMLElement | null = null
+    let sidebar: HTMLElement | null = null
     let toggle: boolean = false;
 
-    console.log(menubar, wrapper, sidebar);
-
-    if (menubar && wrapper && sidebar) {
-        menubar.addEventListener('click', () => {
-            if (toggle) {
-                wrapper.style.opacity = '0';
-                wrapper.style.pointerEvents = 'none';
-                sidebar.style.left = '-100%';
-                toggle = false;
-            } else {
-                wrapper.style.opacity = '1';
-                wrapper.style.pointerEvents = 'auto';
-                sidebar.style.left = '0';
-                toggle = true;
-            }
-        });
-
-        wrapper.addEventListener('click', () => {
-            wrapper.style.opacity = '0';
-            wrapper.style.pointerEvents = 'none';
-            sidebar.style.left = '-100%';
-            toggle = false;
-        });
+    function toggleSidebar(toggle: boolean) {
+        if (menubar && wrapper && sidebar) {
+            wrapper.style.opacity = toggle ? '1' : '0';
+            wrapper.style.pointerEvents = toggle ? 'auto' : 'none';
+            sidebar.style.left = toggle ? '0' : '-100%';
+        }
     }
+
+    function attachEvent() {
+        menubar = document.getElementById('menubar');
+        wrapper = document.getElementById('wrapper');
+        sidebar = document.getElementById('sidebar');
+        toggle = false;
+        if (menubar && wrapper && sidebar) {
+            menubar.addEventListener('click', () => {
+                toggle = !toggle;
+                toggleSidebar(toggle);
+            });
+
+            wrapper.addEventListener('click', () => {
+                toggle = !toggle;
+                toggleSidebar(toggle);
+            });
+        }
+    }
+
+    attachEvent();
+
+    document.addEventListener('astro:after-swap', () => {
+        attachEvent()
+    });
 </script>

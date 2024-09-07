@@ -17,11 +17,12 @@ const { title = "MISC RuleBook Common" } = Astro.props;
         <meta name="generator" content={Astro.generator} />
         <meta name="description" content="MISC RuleBook Common" />
         <title>{title}</title>
+        <ViewTransitions />
     </head>
-    <body class="grid grid-cols-[1fr] grid-rows-[60px_1fr] w-screen h-screen md:grid-cols-[200px_1fr]">
+    <body class="grid grid-cols-[1fr] grid-rows-[60px_1fr] w-screen h-screen md:grid-cols-[220px_1fr]">
         <Header class="col-span-full" transition:persist />
-        <div class="hidden md:block">
-            <Navbar class="row-start-2 col-start-1 h-[100vh-60px]" />
+        <div class="hidden row-start-2 col-start-1 h-[100vh-60px] md:block" transition:persist>
+            <Navbar />
         </div>
         <main class="row-start-2 h-[screen-60px] overflow-y-auto md:col-start-2">
             <div class="min-h-[calc(100%-100px)]">

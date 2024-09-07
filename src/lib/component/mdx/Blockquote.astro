@@ -1,0 +1,60 @@
+---
+const props = Astro.props;
+---
+
+<blockquote {...props}>
+    <slot/>
+</blockquote>
+
+<script>
+    function attachEvent() {
+        const quotes = document.querySelectorAll('blockquote');
+        quotes.forEach(quote => {
+            const match = quote.innerText.split(` `)[0];
+            if (match.match(/\[!(\w+)]/)) {
+                const type = match.replace(/\[!(\w+)]/, '$1');
+                quote.classList.add(`quote-${type}`);
+                quote.innerHTML = quote.innerHTML.replace(`[!${type}]`, '');
+            }
+        });
+    }
+
+    attachEvent();
+    document.addEventListener('astro:after-swap', () => {
+        attachEvent();
+    });
+</script>
+
+<style lang="postcss">
+    blockquote {
+        @apply text-slate-700 border-l-4 border-slate-300 p-3 pt-4 my-4;
+
+        &.quote-WARNING {
+            @apply border-red-300 bg-red-50;
+
+            p {
+                @apply text-red-700;
+            }
+        }
+
+        &.quote-NOTE {
+            @apply border-blue-300 bg-blue-50;
+
+            p {
+                @apply text-blue-600;
+            }
+
+            a {
+                @apply underline;
+            }
+        }
+
+        &.quote-SUCCESS {
+            @apply border-green-300 bg-green-50;
+
+            p {
+                @apply text-green-700;
+            }
+        }
+    }
+</style>

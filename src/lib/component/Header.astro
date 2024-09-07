@@ -8,25 +8,17 @@ interface Props {
 const { class: className } = Astro.props
 ---
 
-<header class={`w-full h-[60px] p-4 bg-slate-900 text-white fixed flex justify-between align-middle ${className}`}>
+<header class={`w-full h-[60px] z-50 p-4 bg-slate-900 text-white fixed flex justify-start align-middle ${className}`}>
     <div class="flex align-middle gap-2">
         <div id="menubar" class="flex align-middle items-center cursor-pointer md:hidden">
             <Icon name="ic:round-menu" class="h-5 w-5 align-middle" />
         </div>
         <h1 class="flex items-center"><a href={base}>MISC RuleBook Common</a></h1>
     </div>
-    <div class="flex align-middle">
-        <div></div>
-        <div class="flex flex-row align-middle gap-1 border border-slate-500 rounded-full px-2">
-            <Icon name="ic:baseline-search" class="flex h-full align-middle" />
-            <label>
-                <input type="text" placeholder="search" class="bg-slate-900 focus:ring-opacity-0" />
-            </label>
-        </div>
-    </div>
 </header>
 
-<div id="wrapper" style="opacity: 0; pointer-events: none" class="fixed transition-opacity duration-300 ease-in-out top-[60px] w-full h-full bg-slate-200/60 md:hidden" />
+<div id="wrapper" style="opacity: 0; pointer-events: none"
+     class="fixed transition-opacity duration-300 ease-in-out top-[60px] z-[49] w-full h-full bg-slate-200/60 md:hidden"/>
 
 <div id="sidebar" style="left: -100%; top: 60px;" class="fixed transition-left duration-300 ease-in-out h-[calc(100%-60px)] z-50 shadow-2xl md:hidden">
     <Navbar class="w-[220px]" />

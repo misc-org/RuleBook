@@ -29,6 +29,14 @@ pages.map((page) => {
         font-optical-sizing: auto;
         font-style: normal;
 
+        h1, h2, h3 {
+            @apply text-slate-800;
+        }
+
+        p, li {
+            @apply text-slate-700;
+        }
+
         h1 {
             @apply text-3xl font-bold pb-2 mb-2 border-b-2 border-slate-300 cursor-pointer;
         }
@@ -63,7 +71,43 @@ pages.map((page) => {
         }
 
         code {
-            @apply px-1 font-mono bg-slate-200 text-slate-600 rounded-sm;
+            @apply px-1 inline-flex flex-wrap align-baseline font-mono bg-slate-200 text-slate-600 rounded-md;
+        }
+
+        ul {
+            @apply list-disc pl-4;
+        }
+
+        ol {
+            @apply list-decimal pl-4;
+        }
+
+        ul, ol {
+            @apply pt-2;
+
+            li {
+                @apply pb-2;
+
+                ::marker {
+                    @apply text-slate-600;
+                }
+            }
+        }
+
+        table {
+            @apply w-full border-collapse table-auto rounded-lg overflow-hidden border border-slate-300 my-4;
+
+            thead {
+                @apply bg-slate-200;
+            }
+
+            tbody {
+                @apply bg-slate-100;
+            }
+
+            th, td {
+                @apply border border-slate-300 p-2 text-slate-700 text-center whitespace-nowrap;
+            }
         }
     }
 </style>

@@ -1,4 +1,5 @@
 ---
+import base from '@lib/utils'
 import { Icon } from "astro-icon/components";
 import pages from "@lib/pages";
 import type { Page } from "@lib/pages";
@@ -102,7 +103,6 @@ function findPageLinks(currentPath: string) {
     return { before, after };
 }
 const { before, after } = findPageLinks(path);
-const base = import.meta.env.PUBLIC_BASE_URL;
 ---
 
 <footer class={`w-full py-4 px-6 bg-slate-200 text-slate-600 grid grid-cols-[0.6fr_1fr_0.6fr] ${className}`}>

@@ -1,10 +1,10 @@
 ---
 import pages from '@lib/pages'
+import base from '@lib/utils'
 interface Props {
     class?: string;
 }
 const { class: className } = Astro.props
-const base = import.meta.env.PUBLIC_BASE_URL;
 ---
 
 <div class={`w-full h-full p-4 bg-slate-50 ${className}`}>

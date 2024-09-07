@@ -1,11 +1,11 @@
 ---
+import base from '@lib/utils'
 import { Icon } from "astro-icon/components";
 import Navbar from "@lib/component/Navbar.astro";
 interface Props {
     class?: string;
 }
 const { class: className } = Astro.props
-const base = import.meta.env.PUBLIC_BASE_URL;
 ---
 
 <header class={`w-full h-[60px] p-4 bg-slate-900 text-white fixed flex justify-between align-middle ${className}`}>

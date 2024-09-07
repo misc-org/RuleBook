@@ -14,7 +14,7 @@ const { class: className } = Astro.props
                     {page.title}
                         {page.contents.map(content => (
                             <div class="pl-2 pb-1">
-                                <a href={`/${page.src}/${content.src}`}>
+                                <a href={`/RuleBook-Front/${page.src}/${content.src}`}>
                                     {content.title}
                                 </a>
                             </div>
@@ -22,7 +22,7 @@ const { class: className } = Astro.props
                 </div>
                 :
                 <div>
-                    <a href={`/${page.src}`}>
+                    <a href={`/RuleBook-Front/${page.src}`}>
                         {page.title}
                     </a>
                 </div>

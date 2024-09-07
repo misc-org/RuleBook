@@ -13,8 +13,12 @@
       "@lib": ["./src/lib"],
       "@layout/*": ["./src/layout/*"],
       "@layout": ["./src/layout"],
-      "@md/*": ["./src/md/*"],
-      "@md": ["./src/md"],
+      "@mdx/*": [
+        "./src/mdx/*"
+      ],
+      "@mdx": [
+        "./src/mdx"
+      ]
     }
   }
 }

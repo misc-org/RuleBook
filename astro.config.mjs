@@ -8,6 +8,6 @@ export default defineConfig({
     site: `https://misc-org.github.io/`,
     base: '/RuleBook-Front',
     redirects: {
-        '/RuleBook-Front': '/RuleBook-Front/start/start',
+        '/': '/RuleBook-Front/start/start',
     }
 });

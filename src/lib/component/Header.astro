@@ -36,7 +36,6 @@ const { class: className } = Astro.props
     let wrapper: HTMLElement | null = null
     let sidebar: HTMLElement | null = null
     let toggle: boolean = false;
-
     function toggleSidebar(toggle: boolean) {
         if (menubar && wrapper && sidebar) {
             wrapper.style.opacity = toggle ? '1' : '0';
@@ -44,7 +43,6 @@ const { class: className } = Astro.props
             sidebar.style.left = toggle ? '0' : '-100%';
         }
     }
-
     function attachEvent() {
         menubar = document.getElementById('menubar');
         wrapper = document.getElementById('wrapper');
@@ -55,16 +53,13 @@ const { class: className } = Astro.props
                 toggle = !toggle;
                 toggleSidebar(toggle);
             });
-
             wrapper.addEventListener('click', () => {
                 toggle = !toggle;
                 toggleSidebar(toggle);
             });
         }
     }
-
     attachEvent();
-
     document.addEventListener('astro:after-swap', () => {
         attachEvent()
     });

@@ -2,8 +2,8 @@
 import Layout from "@layout/default.astro";
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
-    const mds = await getCollection("md");
-    return mds.map((entry: { [x: string]: any; slug: string }) => ({
+    const MDXs = await getCollection("mdx");
+    return MDXs.map((entry: { id: string; collection: "mdx"; data: any; slug: string }) => ({
         params: { path: `/${entry.slug}` },
         props: { entry },
     }));

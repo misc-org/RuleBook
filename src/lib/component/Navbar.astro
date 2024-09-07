@@ -11,7 +11,9 @@ const { class: className } = Astro.props
         <div class={`${i == pages.length - 1 ? "" : "pb-4"}`}>
             {page.contents ?
                 <div>
-                    {page.title}
+                    <div class="pb-1">
+                        {page.title}
+                    </div>
                         {page.contents.map(content => (
                             <div class="pl-2 pb-1">
                                 <a href={`/RuleBook-Front/${page.src}/${content.src}`}>

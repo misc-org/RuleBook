@@ -101,16 +101,27 @@ function findPageLinks(currentPath: string) {
     }
     return { before, after };
 }
-
 const { before, after } = findPageLinks(path);
-console.log(before, after);
 ---
 
-<footer class={`w-full bg-slate-200 flex justify-between ${className}`}>
-    <div class="flex align-middle">
-        {before && <a href={`/${before}`} class="p-2">Previous</a>}
+<footer class={`w-full py-4 px-6 bg-slate-200 text-slate-600 flex justify-between ${className}`}>
+    <div class="flex items-center">
+        {before &&
+                <a href={`/${before}`} class="flex items-center gap-2">
+                    <Icon name="ic:round-chevron-left" class="h-full align-middle" />
+                    Previous
+                </a>
+        }
     </div>
-    <div class="flex align-middle">
-        {after && <a href={`/${after}`} class="p-2">Next</a>}
+    <div class="flex items-center">
+        <p class="p-2">© 2024 MISC</p>
+    </div>
+    <div class="flex items-center">
+        {after &&
+                <a href={`/${after}`} class="flex items-center gap-2">
+                    Next
+                    <Icon name="ic:round-chevron-right" class="h-full align-middle" />
+                </a>
+        }
     </div>
 </footer>

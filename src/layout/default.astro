@@ -2,24 +2,28 @@
 import Header from "@lib/component/Header.astro";
 import Footer from "@lib/component/Footer.astro";
 import Navbar from "@lib/component/Navbar.astro";
+import { ViewTransitions } from 'astro:transitions';
 interface Props {
     title?: string;
 }
 const { title = "MISC RuleBook Common" } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" transition:animate="initial">
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
+        <meta name="description" content="MISC RuleBook Common" />
         <title>{title}</title>
     </head>
-    <body class="grid grid-cols-[200px_1fr] grid-rows-[60px_1fr] w-screen h-screen">
-        <Header class="col-span-full" />
-        <Navbar class="row-start-2 col-start-1 h-[100vh-60px]" />
-        <main class="row-start-2 col-start-2 h-[screen-60px] overflow-y-auto">
+    <body class="grid grid-cols-[1fr] grid-rows-[60px_1fr] w-screen h-screen md:grid-cols-[200px_1fr]">
+        <Header class="col-span-full" transition:persist />
+        <div class="hidden md:block">
+            <Navbar class="row-start-2 col-start-1 h-[100vh-60px]" />
+        </div>
+        <main class="row-start-2 h-[screen-60px] overflow-y-auto md:col-start-2">
             <div class="min-h-[calc(100%-100px)]">
                 <slot />
             </div>

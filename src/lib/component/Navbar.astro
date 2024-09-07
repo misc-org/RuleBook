@@ -4,6 +4,7 @@ interface Props {
     class?: string;
 }
 const { class: className } = Astro.props
+const base = import.meta.env.PUBLIC_BASE_URL;
 ---
 
 <div class={`w-full h-full p-4 bg-slate-50 ${className}`}>
@@ -16,7 +17,7 @@ const { class: className } = Astro.props
                     </div>
                         {page.contents.map(content => (
                             <div class="pl-2 pb-1">
-                                <a href={`/RuleBook-Front/${page.src}/${content.src}`}>
+                                <a href={base + page.src + `/` + content.src}>
                                     {content.title}
                                 </a>
                             </div>
@@ -24,7 +25,7 @@ const { class: className } = Astro.props
                 </div>
                 :
                 <div>
-                    <a href={`/RuleBook-Front/${page.src}`}>
+                    <a href={base + page.src}>
                         {page.title}
                     </a>
                 </div>

@@ -8,12 +8,12 @@ const { class: className } = Astro.props
 
 <div class={`w-full h-full p-4 bg-slate-50 ${className}`}>
     {pages.map((page, i) => (
-        <div class={`${i == pages.length - 1 ? "" : "pb-2"}`}>
+        <div class={`${i == pages.length - 1 ? "" : "pb-4"}`}>
             {page.contents ?
                 <div>
                     {page.title}
                         {page.contents.map(content => (
-                            <div class="pl-2">
+                            <div class="pl-2 pb-1">
                                 <a href={`/${page.src}/${content.src}`}>
                                     {content.title}
                                 </a>

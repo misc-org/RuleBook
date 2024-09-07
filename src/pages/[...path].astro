@@ -8,7 +8,7 @@ export async function getStaticPaths() {
         props: { entry },
     }));
 }
-const { entry } = Astro.props;
+const {entry} = Astro.props as { entry: any };
 const { Content } = await entry.render();
 const heads = await entry.body.split("\n").filter((line: string) => line.startsWith("#"));
 ---

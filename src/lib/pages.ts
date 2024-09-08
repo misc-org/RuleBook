@@ -1,77 +1,44 @@
 export interface Page {
     title: string;
     src: string;
-    contents?: Page[]
+    contents?: string[]
 }
 
-const pages: Page[] = [
+export const pages: Page[] = [
     {
         title: '概要',
         src: 'start',
         contents: [
-            {
-                title: 'はじめに',
-                src: 'start',
-            },
-            {
-                title: 'このサイトの見かた',
-                src: 'how-to-read',
-            },
-            {
-                title: 'サイト構成',
-                src: 'composition'
-            },
-        ]
+            'start',
+            'how-to-read',
+            'composition',
+        ],
     },
     {
         title: '活動',
         src: 'activity',
         contents: [
-            {
-                title: 'ミッション',
-                src: 'mission',
-            },
-            {
-                title: '活動報告会',
-                src: 'announcement',
-            }
-        ]
+            'mission',
+            'announcement',
+        ],
     },
     {
-        title: '教室の備品と使い方',
+        title: '部室の備品との使い方',
         src: 'how-to-use',
         contents: [
-            {
-                title: '315 教室の使い方',
-                src: '315room',
-            },
-            {
-                title: 'ノート PC の使い方',
-                src: 'note-pc',
-            },
-            {
-                title: '共用 PC の使い方',
-                src: 'common-pc',
-            },
-        ]
+            '315room',
+            'note-pc',
+            'common-pc',
+        ],
     },
     {
         title: '情報モラル・リテラシー',
         src: 'moral-literacy',
         contents: [
-            {
-                title: '生成 AI の利用について',
-                src: 'ai',
-            },
-            {
-                title: '情報モラルについて',
-                src: 'moral',
-            },
-            {
-                title: '情報リテラシーについて',
-                src: 'literacy',
-            },
-        ]
+            'ai',
+            'moral',
+            'literacy',
+        ],
     },
     {
         title: 'Slack',
@@ -79,8 +46,6 @@ const pages: Page[] = [
     },
     {
         title: 'Admin',
-        src: 'admin'
-    },
+        src: 'admin',
+    }
 ]
-
-export default pages

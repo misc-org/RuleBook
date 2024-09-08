@@ -2,33 +2,69 @@
 import Header from "@lib/component/Header.astro";
 import Footer from "@lib/component/Footer.astro";
 import Navbar from "@lib/component/Navbar.astro";
-import { ViewTransitions } from 'astro:transitions';
+import base from "@lib/utils";
+import {ViewTransitions} from 'astro:transitions';
+
 interface Props {
     title?: string;
 }
-const { title = "MISC RuleBook Common" } = Astro.props;
+
+const {title = "MISC RuleBook Common"} = Astro.props;
 ---
 
-<html lang="en" transition:animate="initial">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <meta name="description" content="MISC RuleBook Common" />
-        <title>{title}</title>
-        <ViewTransitions />
-    </head>
-    <body class="grid grid-cols-[1fr] grid-rows-[60px_1fr] w-screen h-screen md:grid-cols-[220px_1fr]">
-        <Header class="col-span-full" transition:persist />
-        <div class="hidden row-start-2 col-start-1 h-[100vh-60px] md:block" transition:persist>
-            <Navbar />
-        </div>
-        <main class="row-start-2 h-[screen-60px] overflow-y-auto md:col-start-2">
-            <div class="min-h-[calc(100%-100px)]">
-                <slot />
-            </div>
-            <Footer class="min-h-[100px]" />
-        </main>
-    </body>
+<html lang="ja" transition:animate="initial">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/svg+xml" href={base.slice(0, -1) + `/favicon.svg`}/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="generator" content={Astro.generator}/>
+    <meta name="description" content="MISC RuleBook Common"/>
+    <title>{title}</title>
+    <style is:global>
+        * {
+            transition: background-color 0.3s, color 0.3s, clip-path 0.3s, transform 0.3s, opacity 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+    </style>
+    <script>
+        const toggleSeconds = (toggle: boolean, seconds: string) => {
+            return toggle ? seconds : "0";
+        }
+        const transitionToggle = (toggle: boolean) => {
+            const head = document.querySelector('head');
+            if (!head) return;
+            const styles = head.querySelectorAll('style');
+            if (styles) {
+                styles.forEach(style => {
+                    if (style.innerHTML.includes('transition: background-color')) {
+                        style.innerHTML = `* { transition: background-color ${toggleSeconds(toggle, "0.5")}s, color ${toggleSeconds(toggle, "0.1")}s, clip-path ${toggleSeconds(toggle, "0.3")}s, transform ${toggleSeconds(toggle, "0.3")}s, opacity ${toggleSeconds(toggle, "0.3")}s ease-in-out, left ${toggleSeconds(toggle, "0.3")}s ease-in-out; }`;
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('astro:page-load', () => {
+            transitionToggle(false);
+            const theme = document.cookie.split('; ').find(row => row.startsWith('theme=')).split('=')[1];
+            if (theme.includes('dark')) {
+                document.documentElement.classList.add('dark');
+            }
+            setTimeout(() => {
+                transitionToggle(true);
+            }, 0);
+        });
+    </script>
+    <ViewTransitions/>
+</head>
+<body class="grid grid-cols-[1fr] grid-rows-[60px_1fr] w-screen h-screen md:grid-cols-[220px_1fr] bg-slate-50 dark:bg-slate-800">
+<Header class="col-span-full" transition:persist/>
+<div class="hidden row-start-2 col-start-1 h-[100vh-60px] md:block" transition:persist>
+    <Navbar/>
+</div>
+<main class="row-start-2 h-[screen-60px] overflow-y-auto md:col-start-2">
+    <div class="min-h-[calc(100%-100px)]">
+        <slot/>
+    </div>
+    <Footer class="min-h-[100px]"/>
+</main>
+</body>
 </html>

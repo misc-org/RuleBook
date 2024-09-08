@@ -1,29 +1,53 @@
 ---
 import Layout from "@layout/default.astro";
-import { getCollection } from "astro:content";
-export async function getStaticPaths() {
+import MDX from "@layout/mdx.astro";
+import {getCollection} from "astro:content";
+import type {InferGetStaticPropsType, GetStaticPaths} from "astro";
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+type Entry = {
+    id: string;
+    slug: string;
+    body: string;
+    collection: "mdx";
+    data: {
+        tags: string[];
+        title: string;
+    };
+    render: () => Promise<{ Content: any }>;
+};
+
+export const getStaticPaths = (async () => {
     const MDXs = await getCollection("mdx");
-    return MDXs.map((entry: { id: string; collection: "mdx"; slug: string }) => ({
-        params: { path: `/${entry.slug}` },
-        props: { entry },
+    return MDXs.map((entry: Entry) => ({
+        params: {path: `/${entry.slug}`},
+        props: {entry},
     }));
+}) satisfies GetStaticPaths;
+
+const {entry} = Astro.props as Props;
+
+if (!entry) {
+    return Astro.redirect("/404");
 }
-const {entry} = Astro.props as { entry: any };
-const { Content } = await entry.render();
-const heads = await entry.body.split("\n").filter((line: string) => line.startsWith("#"));
+
+const {Content} = await entry.render();
+const heads = entry.body.split("\n").filter((line: string) => line.startsWith("#"));
 ---
 
 <Layout>
     <article class="p-10 lg:mr-[250px]">
-        <Content />
-        {heads.length > 0 &&
-                <div class="hidden fixed top-[80px] right-[40px] w-[200px] p-2 border border-slate-200 rounded-lg shadow-md lg:block">
-                    {heads.map((head: string) => (
-                            <div class={`p-2 ${head.startsWith("###") ? "pl-4" : ""}`}>
-                                <a href={`#${head.replace(/#/g, "").replace(/ /g, "")}`}>{head.replace(/#/g, "")}</a>
-                            </div>
-                    ))}
-                </div>
-        }
+        <MDX data={entry.data}>
+            <Content/>
+            {heads.length > 0 &&
+                    <div class="hidden fixed top-[80px] right-[40px] w-[200px] p-2 border border-slate-300 rounded-lg shadow-md lg:block">
+                        {heads.map((head: string) => (
+                                <div class={`p-2 ${head.startsWith("###") ? "pl-4" : ""}`}>
+                                    <a href={`#${head.replace(/#/g, "").replace(/ /g, "")}`}>{head.replace(/#/g, "")}</a>
+                                </div>
+                        ))}
+                    </div>
+            }
+        </MDX>
     </article>
 </Layout>

@@ -1,35 +1,33 @@
 ---
-import pages from '@lib/pages'
-import base from '@lib/utils'
+import {pages} from "@lib/pages";
+import Link from "@lib/component/Link.astro";
+
 interface Props {
     class?: string;
 }
-const { class: className } = Astro.props
+
+const {class: className} = Astro.props
 ---
 
-<div class={`w-full h-full p-4 bg-slate-50 overflow-y-auto ${className}`}>
+<div class={`w-full h-full p-4 bg-slate-100 overflow-y-auto text-slate-800 font-bold dark:bg-slate-900 dark:text-slate-200 ${className}`}>
     {pages.map((page, i) => (
-        <div class={`${i == pages.length - 1 ? "" : "pb-4"}`}>
-            {page.contents ?
-                <div>
-                    <div class="pb-1">
-                        {page.title}
-                    </div>
-                        {page.contents.map(content => (
-                            <div class="pl-2 pb-1">
-                                <a href={base + page.src + `/` + content.src}>
-                                    {content.title}
-                                </a>
+            <div class={`${i == pages.length - 1 ? "" : "pb-4"}`}>
+                {page.contents ?
+                        <div>
+                            <div class="pb-1">
+                                {page.title}
                             </div>
-                    ))}
-                </div>
-                :
-                <div>
-                    <a href={base + page.src}>
-                        {page.title}
-                    </a>
-                </div>
-            }
-        </div>
+                            {page.contents.map(content => (
+                                    <div class="pl-2 pb-1">
+                                        <Link page={page} content={content}/>
+                                    </div>
+                            ))}
+                        </div>
+                    :
+                        <div>
+                            <Link page={page} content=""/>
+                        </div>
+                }
+            </div>
     ))}
 </div>

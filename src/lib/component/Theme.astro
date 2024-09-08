@@ -1,0 +1,40 @@
+---
+import {Icon} from "astro-icon/components";
+---
+
+<div class="flex align-middle w-[60px] border border-slate-300 rounded-full px-1.5">
+    <button name="theme" class="w-full">
+        <span class="flex flex-row w-full align-middle items-center justify-between">
+            <Icon name="ic:round-dark-mode" class="h-5 w-5 rotate-180 dark:rotate-0 scale-0 dark:scale-100"/>
+            <Icon name="ic:round-light-mode" class="h-5 w-5 rotate-180 dark:rotate-0 scale-100 dark:scale-0"/>
+        </span>
+    </button>
+</div>
+
+<script>
+    const attachEvent = () => {
+        const theme = document.querySelector('button[name="theme"]');
+        if (theme) {
+            theme.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                document.cookie = `theme=${document.documentElement.classList.contains('dark') ? 'dark' : 'light'}, max-age=31536000`;
+            });
+        }
+    }
+
+    attachEvent();
+
+    document.addEventListener('astro:after-swap', () => {
+        attachEvent();
+    });
+</script>
+
+<style lang="postcss" is:global>
+    button[name="theme"] span {
+        clip-path: circle(10px at 35px center);
+    }
+
+    html.dark button[name="theme"] span {
+        clip-path: circle(10px at 10px center);
+    }
+</style>

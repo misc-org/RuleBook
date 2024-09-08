@@ -7,7 +7,7 @@ const props = Astro.props;
 </blockquote>
 
 <script>
-    function attachEvent() {
+    const attachEvent = () => {
         const quotes = document.querySelectorAll('blockquote');
         quotes.forEach(quote => {
             const match = quote.innerText.split(` `)[0];
@@ -20,6 +20,7 @@ const props = Astro.props;
     }
 
     attachEvent();
+
     document.addEventListener('astro:after-swap', () => {
         attachEvent();
     });
@@ -30,18 +31,18 @@ const props = Astro.props;
         @apply text-slate-700 border-l-4 border-slate-300 p-3 pt-4 my-4;
 
         &.quote-WARNING {
-            @apply border-red-300 bg-red-50;
+            @apply border-red-300;
 
             p {
-                @apply text-red-700;
+                @apply text-red-700 dark:text-red-300;
             }
         }
 
         &.quote-NOTE {
-            @apply border-blue-300 bg-blue-50;
+            @apply border-blue-300;
 
             p {
-                @apply text-blue-600;
+                @apply text-blue-600 dark:text-blue-300;
             }
 
             a {
@@ -50,10 +51,10 @@ const props = Astro.props;
         }
 
         &.quote-SUCCESS {
-            @apply border-green-300 bg-green-50;
+            @apply border-green-300;
 
             p {
-                @apply text-green-700;
+                @apply text-green-700 dark:text-green-300;
             }
         }
     }

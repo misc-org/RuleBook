@@ -1,0 +1,44 @@
+---
+import base from '@lib/utils'
+import {type Page} from "@lib/pages";
+import {Icon} from "astro-icon/components";
+import {getCollection} from "astro:content";
+
+interface Props {
+    page: Page;
+    content?: string;
+}
+type Data = {
+    title: string;
+    tags: string[];
+    slug: string;
+}
+
+const {page, content} = Astro.props
+const data: Data[] = await getCollection("mdx").then((entries) => {
+    return entries.map((entry) => {
+        const title = entry.data.title as string || "";
+        const tags = entry.data.tags as string[] || [];
+        const slug = entry.slug as string || "";
+        return {title, tags, slug};
+    });
+});
+const collect = (page: Page, content?: string) => {
+    if (content) {
+        return data.find((entry) => entry.slug === page.src + "/" + content);
+    } else {
+        return data.find((entry) => entry.slug === page.src);
+    }
+}
+---
+
+<a href={base + page.src + "/" + content} class="flex gap-2 items-center">
+    {content ? collect(page, content)?.title : page.title}
+    {content ?
+        collect(page, content)?.tags.includes("ness") &&
+            <Icon name="ic:round-new-releases" class="h-4 w-4 text-red-400 dark:text-red-500"/>
+        :
+        collect(page)?.tags.includes("ness") &&
+            <Icon name="ic:round-new-releases" class="h-4 w-4 text-red-400 dark:text-red-500"/>
+    }
+</a>

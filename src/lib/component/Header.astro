@@ -1,27 +1,34 @@
 ---
 import base from '@lib/utils'
-import { Icon } from "astro-icon/components";
+import {Icon} from "astro-icon/components";
 import Navbar from "@lib/component/Navbar.astro";
+import Theme from '@lib/component/Theme.astro';
+
 interface Props {
     class?: string;
 }
-const { class: className } = Astro.props
+
+const {class: className} = Astro.props
 ---
 
-<header class={`w-full h-[60px] z-50 p-4 bg-slate-900 text-white fixed flex justify-start align-middle ${className}`}>
+<header class={`w-full h-[60px] z-50 p-4 bg-slate-950 text-white fixed flex justify-between align-middle ${className}`}>
     <div class="flex align-middle gap-2">
         <div id="menubar" class="flex align-middle items-center cursor-pointer md:hidden">
-            <Icon name="ic:round-menu" class="h-5 w-5 align-middle" />
+            <Icon name="ic:round-menu" class="h-5 w-5 align-middle"/>
         </div>
         <h1 class="flex items-center"><a href={base}>MISC RuleBook Common</a></h1>
+    </div>
+    <div class="flex align-middle w-[60px]">
+        <Theme/>
     </div>
 </header>
 
 <div id="wrapper" style="opacity: 0; pointer-events: none"
-     class="fixed transition-opacity duration-300 ease-in-out top-[60px] z-[49] w-full h-full bg-slate-200/60 md:hidden"/>
+     class="fixed top-[60px] z-[49] w-full h-full bg-slate-200/60 dark:bg-slate-900/60 md:hidden"/>
 
-<div id="sidebar" style="left: -100%; top: 60px;" class="fixed transition-left duration-300 ease-in-out h-[calc(100%-60px)] z-50 shadow-2xl md:hidden">
-    <Navbar class="w-[220px]" />
+<div id="sidebar" style="left: -100%; top: 60px;"
+     class="fixed h-[calc(100%-60px)] z-50 shadow-2xl md:hidden">
+    <Navbar class="w-[240px]"/>
 </div>
 
 <script>
@@ -29,14 +36,15 @@ const { class: className } = Astro.props
     let wrapper: HTMLElement | null = null
     let sidebar: HTMLElement | null = null
     let toggle: boolean = false;
-    function toggleSidebar(toggle: boolean) {
+
+    const toggleSidebar = (toggle: boolean) => {
         if (menubar && wrapper && sidebar) {
             wrapper.style.opacity = toggle ? '1' : '0';
             wrapper.style.pointerEvents = toggle ? 'auto' : 'none';
             sidebar.style.left = toggle ? '0' : '-100%';
         }
     }
-    function attachEvent() {
+    const attachEvent = () => {
         menubar = document.getElementById('menubar');
         wrapper = document.getElementById('wrapper');
         sidebar = document.getElementById('sidebar');
@@ -52,7 +60,9 @@ const { class: className } = Astro.props
             });
         }
     }
+
     attachEvent();
+
     document.addEventListener('astro:after-swap', () => {
         attachEvent()
     });

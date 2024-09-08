@@ -1,115 +1,46 @@
 ---
 import base from '@lib/utils'
-import { Icon } from "astro-icon/components";
-import pages from "@lib/pages";
-import type { Page } from "@lib/pages";
+import {Icon} from "astro-icon/components";
+import {pages} from "@lib/pages";
+
 interface Props {
     class?: string;
 }
-const { class: className } = Astro.props;
-const { path } = Astro.params as { path: string };
 
-function findPageLinks(currentPath: string) {
+const findPageLinks = (currentPath: string) => {
     let before: string | null = null;
     let after: string | null = null;
-    let found: boolean = false;
-
-    function traversePages(pageList: Page[], parentPath: string = ''): boolean {
-        for (let i = 0; i < pageList.length; i++) {
-            const page = pageList[i];
-            const fullPath = parentPath ? `${parentPath}/${page.src}` : page.src;
-
-            if (page.contents) {
-                if (traversePages(page.contents, fullPath)) {
-                    return true;
-                }
-            } else {
-                if (found) {
-                    after = fullPath;
-                    return true;
-                }
-
-                if (fullPath === currentPath) {
-                    found = true;
-                    if (i > 0) {
-                        const prevPage = pageList[i - 1];
-                        if (parentPath) {
-                            before = prevPage.contents ? `${parentPath}/${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : `${parentPath}/${prevPage.src}`;
-                        } else {
-                            before = prevPage.contents ? `${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : prevPage.src;
-                        }
-                    } else if (parentPath) {
-                        const parentPages = parentPath.split('/');
-                        const parentIndex = pages.findIndex(p => p.src === parentPages[parentPages.length - 1]);
-                        if (parentIndex > 0) {
-                            const grandParentPage = pages[parentIndex - 1];
-                            if (grandParentPage.contents) {
-                                if (parentPages.length === 1) {
-                                    before = `${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
-                                } else {
-                                    before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
-                                }
-                            } else {
-                                before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}`;
-                            }
-                        }
-                    }
-                }
-            }
+    const slugs = pages.map(page => {
+        if (page.contents) {
+            return page.contents.map((content) => page.src + "/" + content);
+        } else {
+            return page.src;
         }
-        return false;
-    }
-
-    function traverseAllPages(pageList: Page[], parentPath: string = ''): boolean {
-        for (let i = 0; i < pageList.length; i++) {
-            const page = pageList[i];
-            const fullPath = parentPath ? `${parentPath}/${page.src}` : page.src;
-
-            if (found) {
-                after = page.contents ? `${fullPath}/${page.contents[0].src}` : fullPath;
-                return true;
+    }).flatMap((x) => x);
+    for (let i = 0; i < slugs.length; i++) {
+        if (slugs[i] === currentPath) {
+            if (i > 0) {
+                before = slugs[i - 1];
             }
-
-            if (fullPath === currentPath) {
-                found = true;
-                if (i > 0) {
-                    const prevPage = pageList[i - 1];
-                    before = prevPage.contents ? `${parentPath}/${prevPage.src}/${prevPage.contents[prevPage.contents.length - 1].src}` : `${parentPath}/${prevPage.src}`;
-                } else if (parentPath) {
-                    const parentPages = parentPath.split('/');
-                    const parentIndex = pageList.findIndex(p => p.src === parentPages[parentPages.length - 1]);
-                    if (parentIndex > 0) {
-                        const grandParentPage = pageList[parentIndex - 1];
-                        if (grandParentPage.contents) {
-                            before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}/${grandParentPage.contents[grandParentPage.contents.length - 1].src}`;
-                        } else {
-                            before = `${parentPages.slice(0, -1).join('/')}/${grandParentPage.src}`;
-                        }
-                    }
-                }
+            if (i < slugs.length - 1) {
+                after = slugs[i + 1];
             }
-
-            if (page.contents && traverseAllPages(page.contents, fullPath)) {
-                return true;
-            }
+            break;
         }
-        return false;
     }
-
-    traversePages(pages);
-    if (!found) {
-        traverseAllPages(pages);
-    }
-    return { before, after };
+    return {before, after};
 }
-const { before, after } = findPageLinks(path);
+
+const {class: className} = Astro.props;
+const {path} = Astro.params as { path: string };
+const {before, after} = findPageLinks(path);
 ---
 
-<footer class={`w-full py-4 px-6 bg-slate-200 text-slate-600 grid grid-cols-[0.6fr_1fr_0.6fr] ${className}`}>
+<footer class={`w-full py-4 px-6 bg-slate-200 text-slate-600 grid grid-cols-[0.6fr_1fr_0.6fr] dark:bg-slate-700 dark:text-slate-300 ${className}`}>
     <div class="flex items-center justify-start">
         {before &&
                 <a href={base + before} class="flex items-center gap-2">
-                    <Icon name="ic:round-chevron-left" class="h-full align-middle" />
+                    <Icon name="ic:round-chevron-left" class="h-full align-middle"/>
                     Previous
                 </a>
         }
@@ -121,7 +52,7 @@ const { before, after } = findPageLinks(path);
         {after &&
                 <a href={base + after} class="flex items-center gap-2">
                     Next
-                    <Icon name="ic:round-chevron-right" class="h-full align-middle" />
+                    <Icon name="ic:round-chevron-right" class="h-full align-middle"/>
                 </a>
         }
     </div>

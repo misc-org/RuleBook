@@ -44,7 +44,7 @@ const {title = "MISC RuleBook Common"} = Astro.props;
 
         document.addEventListener('astro:page-load', () => {
             transitionToggle(false);
-            const theme = document.cookie.split('; ').find(row => row.startsWith('theme=')).split('=')[1];
+            const theme = document.cookie?.split('; ')?.find(row => row.startsWith('theme='))?.split('=')[1];
             if (theme && theme.includes('dark')) {
                 document.documentElement.classList.add('dark');
             }

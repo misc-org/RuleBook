@@ -8,6 +8,6 @@ interface Props {
 const {href} = Astro.props as Props;
 ---
 
-<a href={base + href}>
+<a href={href.includes("http") ? href : base + href}>
     <slot/>
 </a>

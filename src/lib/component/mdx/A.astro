@@ -1,0 +1,13 @@
+---
+import base from "@lib/utils.ts";
+
+interface Props {
+    href: string;
+}
+
+const {href} = Astro.props as Props;
+---
+
+<a href={base + href}>
+    <slot/>
+</a>
